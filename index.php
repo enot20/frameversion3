@@ -2,7 +2,162 @@
 /**
  * FRAME - Agencia de Diseño y Arquitectura de Software
  * Landing Page - Optimizada para escalar
+ * 
+ * Seguridad implementada:
+ * - Headers de protección XSS, Clickjacking, MIME sniffing
+ * - Content Security Policy (CSP)
+ * - Prepared statements listos para MariaDB (futuro)
  */
+
+// Prevenir cache en páginas sensibles
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// Headers de Seguridad XSS y MIME
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: SAMEORIGIN");
+header("X-XSS-Protection: 1; mode=block");
+header("X-Permitted-Cross-Domain-Policies: master-only");
+
+// Content Security Policy (CSP)
+// Permite: mismo origen, scripts inline seguros, CDNs autorizados
+header("Content-Security-Policy: 
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' 
+        https://code.jquery.com 
+        https://cdn.jsdelivr.net 
+        https://unpkg.com
+        https://cdnjs.cloudflare.com;
+    style-src 'self' 'unsafe-inline' 
+        https://fonts.googleapis.com
+        https://cdn.jsdelivr.net
+        https://unpkg.com
+        https://cdnjs.cloudflare.com;
+    font-src 'self' 
+        https://fonts.gstatic.com
+        https://cdnjs.cloudflare.com
+        https://use.fontawesome.com
+        data:;
+    img-src 'self' data: blob:;
+    connect-src 'self' 
+        https://api.web3forms.com
+        https://wa.me;
+    frame-src 'self';
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self' https://wa.me mailto:;
+");
+
+// Referrer Policy - Control de información en referencias
+header("Referrer-Policy: strict-origin-when-cross-origin");
+
+// Permissions Policy - Deshabilitar APIs innecesarias
+header("Permissions-Policy: 
+    camera=(), 
+    microphone=(), 
+    geolocation=(), 
+    payment=()
+");
+
+// Prevenir MIME type sniffing
+header("X-Content-Type-Options: nosniff");
+
+// HSTS - Forzar HTTPS (descomentar cuando tengas SSL activo)
+// header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
+
+// Prevenir clickjacking
+header("X-Frame-Options: SAMEORIGIN");
+
+// Configuración de sesión segura (para futuro login)
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_httponly', 1);
+    ini_set('session.cookie_secure', 1); // Descomentar con HTTPS
+    ini_set('session.use_strict_mode', 1);
+    ini_set('session.cookie_samesite', 'Strict');
+}
+
+// Generar token CSRF para formularios futuros
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+/**
+ * Funciones de Seguridad para futuro desarrollo
+ * Usar cuando conectes a MariaDB
+ */
+
+/**
+ * Validar token CSRF
+ */
+function validarCSRF(string $token): bool {
+    if (!isset($_SESSION['csrf_token']) || !isset($_POST['csrf_token'])) {
+        return false;
+    }
+    return hash_equals($_SESSION['csrf_token'], $token);
+}
+
+/**
+ * Sanitizar input para XSS
+ */
+function sanitizarInput(string $input): string {
+    return htmlspecialchars(trim($input), ENT_QUOTES, 'UTF-8');
+}
+
+/**
+ * Validar email con filtro PHP
+ */
+function validarEmail(string $email): bool {
+    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+}
+
+/**
+ * Prepared statement helper para MariaDB (usar con PDO)
+ */
+function crearConexionSegura(string $host, string $dbname, string $user, string $pass): PDO {
+    $dsn = "mysql:host={$host};dbname={$dbname};charset=utf8mb4";
+    $opciones = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci"
+    ];
+    return new PDO($dsn, $user, $pass, $opciones);
+}
+
+/**
+ * Rate limiting simple por IP
+ */
+function verificarRateLimit(string $ip, int $maxRequests = 10, int $windowSeconds = 60): bool {
+    $key = "rate_limit_" . md5($ip);
+    $ahora = time();
+    
+    if (!isset($_SESSION[$key])) {
+        $_SESSION[$key] = ['count' => 1, 'start' => $ahora];
+        return true;
+    }
+    
+    $data = $_SESSION[$key];
+    
+    // Reset si pasó la ventana de tiempo
+    if (($ahora - $data['start']) > $windowSeconds) {
+        $_SESSION[$key] = ['count' => 1, 'start' => $ahora];
+        return true;
+    }
+    
+    // Verificar límite
+    if ($data['count'] >= $maxRequests) {
+        return false;
+    }
+    
+    $_SESSION[$key]['count']++;
+    return true;
+}
+
+// Regenerar CSRF token después de uso exitoso (en proceso de formulario)
+function regenerarCSRF(): void {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -53,44 +208,32 @@
     <div id="particles-js"></div>
     
     <!-- Navigation -->
-<nav class="navbar navbar-expand-lg fixed-top navbar-custom" id="mainNav">
-    <div class="container px-4 px-lg-5">
+    <nav class="navbar navbar-expand-lg fixed-top navbar-custom" id="mainNav">
+        <div class="container px-4 px-lg-5">
 
-        <!-- LOGO -->
-        <a class="navbar-brand d-flex align-items-center" href="#page-top">
-            <i class="fas fa-code me-2"></i>
-            <span class="fw-bold">FRAME</span>
-        </a>
+            <!-- LOGO -->
+            <a class="navbar-brand d-flex align-items-center" href="#page-top">
+                <i class="fas fa-code me-2"></i>
+                <span class="fw-bold">FRAME</span>
+            </a>
 
-        <!-- BOTON MOBILE -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive">
-            <i class="fas fa-bars"></i>
-        </button>
+            <!-- BOTON MOBILE -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive">
+                <i class="fas fa-bars"></i>
+            </button>
 
-        <!-- MENU -->
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ms-auto align-items-lg-center">
+            <!-- MENU -->
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
 
-                <li class="nav-item">
-                    <a class="nav-link" href="#nosotros">Nosotros</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#servicios">Servicios</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#proyectos">Proyectos</a>
-                </li>
-
-                <li class="nav-item ms-lg-3">
-                    <a class="btn btn-gradient" href="#contacto">Contacto</a>
-                </li>
-
-            </ul>
+                    <li class="nav-item"><a class="nav-link" href="#nosotros">Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#proyectos">Proyectos</a></li>
+                    <li class="nav-item ms-lg-3"><a class="btn btn-gradient" href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
     <!-- Masthead -->
     <header class="masthead">
@@ -108,70 +251,70 @@
     </header>
 
     <!-- About -->
-<section class="about-section text-center" id="nosotros">
-    <div class="container px-4 px-lg-5">
+    <section class="about-section text-center" id="nosotros">
+        <div class="container px-4 px-lg-5">
 
-        <!-- TEXTO PRINCIPAL -->
-        <div class="row justify-content-center">
-            <div class="col-lg-9 text-center" data-aos="fade-up" data-aos-duration="1000">
+            <!-- TEXTO PRINCIPAL -->
+            <div class="row justify-content-center">
+                <div class="col-lg-9 text-center" data-aos="fade-up" data-aos-duration="1000">
 
-                <h2 class="clean-title mb-4">
-                    TRANSFORMAMOS IDEAS EN SOLUCIONES DIGITALES
-                </h2>
+                    <h2 class="clean-title mb-4">
+                        TRANSFORMAMOS IDEAS EN SOLUCIONES DIGITALES
+                    </h2>
 
-                <p class="clean-text">
-                    En FRAME somos una agencia especializada en el diseño y desarrollo de arquitecturas de software personalizadas. 
-                    Combinamos creatividad, tecnología de punta y estrategias de marketing digital para crear soluciones que impulsan tu negocio al siguiente nivel.
-                </p>
+                    <p class="clean-text">
+                        En FRAME somos una agencia especializada en el diseño y desarrollo de arquitecturas de software personalizadas. 
+                        Combinamos creatividad, tecnología de punta y estrategias de marketing digital para crear soluciones que impulsan tu negocio al siguiente nivel.
+                    </p>
 
-            </div>
-        </div>
-
-        <!-- CARDS -->
-        <div class="row mt-5">
-
-            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="card custom-card h-100">
-                    <div class="card-body">
-                        <h4 class="fw-bold">Misión</h4>
-                        <p>
-                            Desarrollar soluciones digitales innovadoras y personalizadas que ayuden a nuestros clientes a optimizar sus procesos, 
-                            mejorar su presencia digital y alcanzar sus objetivos de negocio.
-                        </p>
-                    </div>
                 </div>
             </div>
 
-            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="card custom-card h-100">
-                    <div class="card-body">
-                        <h4 class="fw-bold">Visión</h4>
-                        <p>
-                            Ser una empresa líder en innovación tecnológica a nivel regional, reconocida por la calidad de nuestras soluciones 
-                            y por impulsar la transformación digital de empresas en distintos sectores.
-                        </p>
+            <!-- CARDS -->
+            <div class="row mt-5">
+
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card custom-card h-100">
+                        <div class="card-body">
+                            <h4 class="fw-bold">Misión</h4>
+                            <p>
+                                Desarrollar soluciones digitales innovadoras y personalizadas que ayuden a nuestros clientes a optimizar sus procesos, 
+                                mejorar su presencia digital y alcanzar sus objetivos de negocio.
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
-                <div class="card custom-card h-100">
-                    <div class="card-body">
-                        <h4 class="fw-bold">Valores</h4>
-                        <ul class="text-start ps-3">
-                            <li>Innovación constante</li>
-                            <li>Compromiso con la calidad</li>
-                            <li>Trabajo en equipo</li>
-                            <li>Transparencia</li>
-                            <li>Orientación al cliente</li>
-                        </ul>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card custom-card h-100">
+                        <div class="card-body">
+                            <h4 class="fw-bold">Visión</h4>
+                            <p>
+                                Ser una empresa líder en innovación tecnológica a nivel regional, reconocida por la calidad de nuestras soluciones 
+                                y por impulsar la transformación digital de empresas en distintos sectores.
+                            </p>
+                        </div>
                     </div>
                 </div>
+
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card custom-card h-100">
+                        <div class="card-body">
+                            <h4 class="fw-bold">Valores</h4>
+                            <ul class="text-start ps-3">
+                                <li>Innovación constante</li>
+                                <li>Compromiso con la calidad</li>
+                                <li>Trabajo en equipo</li>
+                                <li>Transparencia</li>
+                                <li>Orientación al cliente</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-        </div>
-
-</section>
+    </section>
 
     <!-- Services -->
     <section class="services-section bg-light" id="servicios">
@@ -289,9 +432,15 @@
                     <h2 class="text-white mb-3">Mantente actualizado con nuestras novedades</h2>
                     <p class="text-white-50 mb-4">Suscríbete para recibir las últimas noticias sobre marketing digital y tecnología</p>
                     <form id="contactForm" onsubmit="enviarFormulario(event)">
+                        <!-- Honeypot anti-bot (oculto) -->
+                        <input type="text" name="website" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="off">
+                        
+                        <!-- CSRF Token -->
+                        <input type="hidden" name="csrf_token" id="csrfToken" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+                        
                         <div class="row input-group-newsletter">
                             <div class="col-12 col-md-8 mb-3 mb-md-0">
-                                <input class="form-control" id="emailAddress" type="email" placeholder="Tu correo electrónico..." required />
+                                <input class="form-control" id="emailAddress" name="email" type="email" placeholder="Tu correo electrónico..." required autocomplete="email" />
                             </div>
                             <div class="col-12 col-md-4">
                                 <button class="btn btn-primary w-100" id="submitButton" type="submit">Suscribirme</button>
@@ -465,5 +614,86 @@
     <!-- Custom JS -->
     <script src="js/scripts.js"></script>
     <script src="js/custom.js"></script>
+    
+    <!-- Actualizar CSRF Token en JS -->
+    <script>
+        // Actualizar token CSRF antes de enviar
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            // El token ya está en el input hidden
+        });
+    </script>
 </body>
 </html>
+
+<?php
+/**
+ * =============================================
+ * EJEMPLO: Procesar Formulario Seguro (FUTURO)
+ * =============================================
+ * Descomentar cuando conectes a MariaDB
+ * Ubicar en un archivo separado: api/suscribir.php
+ * 
+ * <?php
+ * require_once 'config/database.php';
+ * 
+ * header('Content-Type: application/json');
+ * 
+ * // Verificar método POST
+ * if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+ *     http_response_code(405);
+ *     echo json_encode(['error' => 'Método no permitido']);
+ *     exit;
+ * }
+ * 
+ * // Obtener IP del cliente
+ * $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+ * 
+ * // Rate limiting
+ * if (!verificarRateLimit($ip, 5, 60)) {
+ *     http_response_code(429);
+ *     echo json_encode(['error' => 'Demasiadas solicitudes']);
+ *     exit;
+ * }
+ * 
+ * // Validar CSRF
+ * $csrfToken = $_POST['csrf_token'] ?? '';
+ * if (!validarCSRF($csrfToken)) {
+ *     http_response_code(403);
+ *     echo json_encode(['error' => 'Token inválido']);
+ *     exit;
+ * }
+ * 
+ * // Honeypot check
+ * if (!empty($_POST['website'])) {
+ *     // Es un bot, ignorar silenciosamente
+ *     echo json_encode(['success' => true]);
+ *     exit;
+ * }
+ * 
+ * // Sanitizar y validar email
+ * $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+ * if (!validarEmail($email)) {
+ *     http_response_code(400);
+ *     echo json_encode(['error' => 'Email inválido']);
+ *     exit;
+ * }
+ * 
+ * try {
+ *     $pdo = crearConexionSegura(DB_HOST, DB_NAME, DB_USER, DB_PASS);
+ *     
+ *     // Prepared statement para prevenir SQL injection
+ *     $stmt = $pdo->prepare(
+ *         "INSERT INTO suscriptores (email, ip, fecha) VALUES (?, ?, NOW())"
+ *     );
+ *     $stmt->execute([$email, $ip]);
+ *     
+ *     regenerarCSRF();
+ *     echo json_encode(['success' => true]);
+ * } catch (PDOException $e) {
+ *     // Log error sin exponer detalles
+ *     error_log("DB Error: " . $e->getMessage());
+ *     http_response_code(500);
+ *     echo json_encode(['error' => 'Error interno']);
+ * }
+ */
+?>
