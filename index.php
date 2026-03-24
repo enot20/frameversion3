@@ -53,26 +53,44 @@
     <div id="particles-js"></div>
     
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
-        <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="#page-top">
-                <i class="fas fa-code me-2"></i>
-                FRAME
-            </a>
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                Menu
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#nosotros">Nosotros</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#proyectos">Proyectos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
-                </ul>
-            </div>
+<nav class="navbar navbar-expand-lg fixed-top navbar-custom" id="mainNav">
+    <div class="container px-4 px-lg-5">
+
+        <!-- LOGO -->
+        <a class="navbar-brand d-flex align-items-center" href="#page-top">
+            <i class="fas fa-code me-2"></i>
+            <span class="fw-bold">FRAME</span>
+        </a>
+
+        <!-- BOTON MOBILE -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- MENU -->
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#nosotros">Nosotros</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#servicios">Servicios</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#proyectos">Proyectos</a>
+                </li>
+
+                <li class="nav-item ms-lg-3">
+                    <a class="btn btn-gradient" href="#contacto">Contacto</a>
+                </li>
+
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <!-- Masthead -->
     <header class="masthead">
@@ -90,19 +108,70 @@
     </header>
 
     <!-- About -->
-    <section class="about-section text-center" id="nosotros">
-        <div class="container px-4 px-lg-5">
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-lg-8" data-aos="fade-up" data-aos-duration="1000">
-                    <h2 class="text-white mb-4">Transformamos ideas en soluciones digitales</h2>
-                    <p class="text-white-50">
-                        En FRAME somos una agencia especializada en el diseño y desarrollo de arquitecturas de software personalizadas. Combinamos creatividad, tecnología de punta y estrategias de marketing digital para crear soluciones que impulsan tu negocio al siguiente nivel.
-                    </p>
-                    <img class="img-fluid" src="assets/img/frame-team.jpg" alt="Equipo FRAME" data-aos="zoom-in" data-aos-duration="1500" />
-                </div>
+<section class="about-section text-center" id="nosotros">
+    <div class="container px-4 px-lg-5">
+
+        <!-- TEXTO PRINCIPAL -->
+        <div class="row justify-content-center">
+            <div class="col-lg-9 text-center" data-aos="fade-up" data-aos-duration="1000">
+
+                <h2 class="clean-title mb-4">
+                    TRANSFORMAMOS IDEAS EN SOLUCIONES DIGITALES
+                </h2>
+
+                <p class="clean-text">
+                    En FRAME somos una agencia especializada en el diseño y desarrollo de arquitecturas de software personalizadas. 
+                    Combinamos creatividad, tecnología de punta y estrategias de marketing digital para crear soluciones que impulsan tu negocio al siguiente nivel.
+                </p>
+
             </div>
         </div>
-    </section>
+
+        <!-- CARDS -->
+        <div class="row mt-5">
+
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="card custom-card h-100">
+                    <div class="card-body">
+                        <h4 class="fw-bold">Misión</h4>
+                        <p>
+                            Desarrollar soluciones digitales innovadoras y personalizadas que ayuden a nuestros clientes a optimizar sus procesos, 
+                            mejorar su presencia digital y alcanzar sus objetivos de negocio.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="card custom-card h-100">
+                    <div class="card-body">
+                        <h4 class="fw-bold">Visión</h4>
+                        <p>
+                            Ser una empresa líder en innovación tecnológica a nivel regional, reconocida por la calidad de nuestras soluciones 
+                            y por impulsar la transformación digital de empresas en distintos sectores.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="card custom-card h-100">
+                    <div class="card-body">
+                        <h4 class="fw-bold">Valores</h4>
+                        <ul class="text-start ps-3">
+                            <li>Innovación constante</li>
+                            <li>Compromiso con la calidad</li>
+                            <li>Trabajo en equipo</li>
+                            <li>Transparencia</li>
+                            <li>Orientación al cliente</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+</section>
 
     <!-- Services -->
     <section class="services-section bg-light" id="servicios">
