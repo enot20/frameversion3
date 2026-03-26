@@ -12814,3 +12814,19 @@ body {
 }
 
 
+
+    .clean-text {
+        font-size: 1rem;
+    }
+
+
+/* icono fgrame */
+.logo-frame {
+    height: 40px;       /* Ajusta según el alto de la barra */
+    width: auto;        /* Mantiene proporción */
+    margin-right: 8px;  /* Espacio entre logo y texto */
+}
+.navbar-custom {
+    background-color: #fff;   /* Fondo claro o el que prefieras */
+    padding: 0.5rem 1rem;     /* Ajusta espaciado */
+}

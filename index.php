@@ -190,9 +190,15 @@ function regenerarCSRF(): void {
         <div class="container px-4 px-lg-5">
 
             <!-- LOGO -->
+             <!--
             <a class="navbar-brand d-flex align-items-center" href="#page-top">
-                <i class="fas fa-code me-2"></i>
+                <img class="img-fluid mb-3 mb-lg-0" src="assets/img/iconframe.png" alt="icono FRAME" />
                 <span class="fw-bold">FRAME</span>
+            </a>
+    -->
+            <a class="navbar-brand d-flex align-items-center" href="#page-top">
+                <img class="logo-frame" src="assets/img/iconframe.png" alt="icono FRAME" />
+                <span class="fw-bold ms-2">FRAME</span>
             </a>
 
             <!-- BOTON MOBILE -->
