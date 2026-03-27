@@ -142,11 +142,12 @@ function regenerarCSRF(): void {
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="FRAME - Agencia de Diseño y Arquitectura de Software especializada en Marketing Digital" />
-    <meta name="author" content="FRAME" />
-    <title>FRAME - Agencia de Diseño y Arquitectura de Software</title>
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    
+    <meta name="description" content="FRAME - Agencia de Marketing Digital especializada en diseño de Software a la medida." />
+    <meta name="author" content="softwareFRAME" />
+    <title>FRAME - Agencia de Marketing Digital y Software</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="assets/img/iconframe.png" type="image/png" sizes="32x32" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
