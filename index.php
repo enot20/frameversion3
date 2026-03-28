@@ -577,7 +577,7 @@ function regenerarCSRF(): void {
                                 <i class="fas fa-envelope fa-3x text-primary mb-3"></i>
                                 <h4 class="text-uppercase mb-3">Email</h4>
                                 <hr style="width: 60px; border-width: 3px; border-color: #fd8e18;" />
-                                <p class="text-muted mb-0"><a href="mailto:hola@frame.sv">hola@frame.sv</a></p>
+                                <p class="text-muted mb-0"><a href="framesvagency@gmail.com">framesvagency@gmail.com</a></p>
                             </div>
                         </div>
                     </div>
@@ -607,7 +607,7 @@ function regenerarCSRF(): void {
                                 <i class="fab fa-tiktok fa-3x text-primary mb-3"></i>
                                 <h4 class="text-uppercase mb-3">TikTok</h4>
                                 <hr style="width: 60px; border-width: 3px; border-color: #fd8e18;" />
-                                <p class="text-muted mb-0"><a href="https://tiktok.com/@frame.sv">@frame.sv</a></p>
+                                <p class="text-muted mb-0"><a href="https://www.tiktok.com/@frame_agency8?_r=1&_t=ZS-953Yh7y7Osv">@frame.sv</a></p>
                             </div>
                         </div>
                     </div>
@@ -626,10 +626,10 @@ function regenerarCSRF(): void {
                 <h4 class="text-uppercase mb-3">Redes Sociales</h4>
                 <div class="d-flex justify-content-center gap-3 flex-wrap">
                     <a class="btn btn-lg btn-social btn-whatsapp" href="https://wa.me/50370101010" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                    <a class="btn btn-lg btn-social btn-instagram" href="https://instagram.com/frame.sv" target="_blank"><i class="fab fa-instagram"></i></a>
-                    <a class="btn btn-lg btn-social btn-facebook" href="https://facebook.com/frame.sv" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                    <a class="btn btn-lg btn-social btn-tiktok" href="https://tiktok.com/@frame.sv" target="_blank"><i class="fab fa-tiktok"></i></a>
-                    <a class="btn btn-lg btn-social btn-email" href="mailto:hola@frame.sv"><i class="fas fa-envelope"></i></a>
+                    <a class="btn btn-lg btn-social btn-instagram" href="https://www.instagram.com/frame_sv.agency?igsh=emh0bXI2em9ycDFx" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a class="btn btn-lg btn-social btn-facebook" href="https://www.facebook.com/profile.php?id=61575565434420" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-lg btn-social btn-tiktok" href="https://www.tiktok.com/@frame_agency8?_r=1&_t=ZS-953Yh7y7Osv" target="_blank"><i class="fab fa-tiktok"></i></a>
+                    <a class="btn btn-lg btn-social btn-email" href="mailto:framesvagency@gmail.com"><i class="fas fa-envelope"></i></a>
                 </div>
             </div>
         </div>
@@ -660,7 +660,7 @@ function regenerarCSRF(): void {
                     <ul class="footer-contact">
                         <li><i class="fas fa-map-marker-alt"></i><span>San Salvador, El Salvador</span></li>
                         <li><i class="fas fa-phone"></i><a href="tel:+50321210000">+503 2121-0000</a></li>
-                        <li><i class="fas fa-envelope"></i><a href="mailto:hola@frame.sv">hola@frame.sv</a></li>
+                        <li><i class="fas fa-envelope"></i><a href="mailto:framesvagency@gmail.com">framesvagency@gmail.com</a></li>
                         <li><i class="fab fa-whatsapp"></i><a href="https://wa.me/50370101010">+503 7010-1010</a></li>
                     </ul>
                 </div>
@@ -669,10 +669,10 @@ function regenerarCSRF(): void {
                     <p class="text-white-50 mb-3">Conéctate con nosotros en redes sociales</p>
                     <div class="social-icons">
                         <a href="https://wa.me/50370101010" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                        <a href="https://instagram.com/frame.sv" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="https://facebook.com/frame.sv" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://tiktok.com/@frame.sv" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-                        <a href="mailto:hola@frame.sv" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                        <a href="https://www.instagram.com/frame_sv.agency?igsh=emh0bXI2em9ycDFx" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.facebook.com/profile.php?id=61575565434420" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.tiktok.com/@frame_agency8?_r=1&_t=ZS-953Yh7y7Osv" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                        <a href="mailto:framesvagency@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
                         <a href="https://linkedin.com/company/frame-sv" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
